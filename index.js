@@ -11,10 +11,10 @@ const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
 const PORT = process.env.PORT || 3000;
 
-// 📌 Step 1: Get Google access token
+// ✅ Step 1: Get Google access token
 async function getAccessToken() {
   const auth = new GoogleAuth({
-    keyFile: '/etc/secrets/ezzimachineries-mscw-697bf82feaf1.json', // ✅ your Render secret file
+    keyFile: '/etc/secrets/ezzimachineries-mscw-697bf82feaf1.json', // Your Render secret file
     scopes: 'https://www.googleapis.com/auth/cloud-platform',
   });
 
@@ -23,7 +23,7 @@ async function getAccessToken() {
   return accessToken.token;
 }
 
-// 📌 Step 2: Send user message to Dialogflow
+// ✅ Step 2: Send user message to Dialogflow
 async function sendToDialogflow(message, sessionId) {
   const accessToken = await getAccessToken();
 
@@ -45,7 +45,7 @@ async function sendToDialogflow(message, sessionId) {
   return response.data.queryResult.fulfillmentText;
 }
 
-// 📌 Step 3: Send message back to user on WhatsApp
+// ✅ Step 3: Send message back to user on WhatsApp
 async function sendMessageToWhatsApp(recipient, message) {
   const url = https://graph.facebook.com/v19.0/${PHONE_NUMBER_ID}/messages;
 
@@ -63,7 +63,7 @@ async function sendMessageToWhatsApp(recipient, message) {
   });
 }
 
-// 📌 Step 4: Webhook endpoint
+// ✅ Step 4: Handle incoming messages (POST webhook)
 app.post('/webhook', async (req, res) => {
   try {
     const entry = req.body.entry?.[0];
@@ -86,9 +86,9 @@ app.post('/webhook', async (req, res) => {
   }
 });
 
-// 📌 Step 5: Webhook verification (for Meta)
+// ✅ Step 5: Webhook Verification (GET webhook)
 app.get('/webhook', (req, res) => {
-  const verifyToken = 'ezzi-whatsapp-bot'; // You must match this in WhatsApp cloud setup
+  const verifyToken = 'ezzi-whatsapp-bot'; // This must match Meta setup
   const mode = req.query['hub.mode'];
   const token = req.query['hub.verify_token'];
   const challenge = req.query['hub.challenge'];
